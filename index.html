@@ -7,6 +7,94 @@
     <title>Apricity: An Interactive Artwork</title>
     <meta name="description" content="A generative artwork exploring 'apricity' - the warmth of the winter sun. Watch as a low sun brings life to a cold landscape.">
     
+    <!-- Open Graph / Facebook -->
+    <meta property="og:title" content="APRICITY.IM • The Warmth of the Winter Sun">
+    <meta property="og:description" content="A digital monument exploring apricity - the warmth of the winter sun. An interactive generative artwork where life awakens as the sun travels its low winter arc.">
+    <meta property="og:image" content="https://apricity.im/og-image.png">
+    <meta property="og:site_name" content="apricity.im">
+    <meta property="og:url" content="https://apricity.im">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://apricity.im">
+    <meta name="twitter:title" content="APRICITY.IM • The Warmth of the Winter Sun">
+    <meta name="twitter:description" content="A digital monument exploring apricity - the warmth of the winter sun. An interactive generative artwork where life awakens as the sun travels its low winter arc.">
+    <meta name="twitter:image" content="https://apricity.im/og-image.png">
+
+    <!-- Canonical Link -->
+    <link rel="canonical" href="https://apricity.im" />
+
+    <!-- Webmention Endpoint -->
+    <link rel="webmention" href="https://webmention.io/unearth.im/webmention" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "VisualArtwork",
+      "@id": "https://apricity.im/#artwork",
+      "name": "Apricity",
+      "headline": "APRICITY.IM • The Warmth of the Winter Sun",
+      "url": "https://apricity.im",
+      "description": "A generative digital monument exploring 'apricity'—the warmth of the winter sun. An interactive artwork where life awakens as the sun travels its low winter arc.",
+      "artMedium": "Generative JavaScript (Canvas API)",
+      "artForm": "Digital Monument",
+      "genre": "Interactive Art",
+      "image": "https://apricity.im/og-image.png",
+      "inLanguage": "en-US",
+      "copyrightYear": "2025",
+      "author": [
+        { "@id": "https://josiest.com/#person" },
+        { "@id": "https://felixvelas.co/#person" }
+      ],
+      "creator": [
+        { "@id": "https://josiest.com/#person" },
+        { "@id": "https://felixvelas.co/#person" }
+      ],
+      "publisher": { "@id": "https://unearth.im/#organization" },
+      "isPartOf": { "@id": "https://unearth.im/#collection" },
+      "mainEntityOfPage": { "@id": "https://apricity.im/#website" }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://apricity.im/#website",
+      "url": "https://apricity.im",
+      "name": "APRICITY.IM",
+      "publisher": { "@id": "https://unearth.im/#organization" }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://unearth.im/#organization",
+      "name": "unearth.im",
+      "url": "https://unearth.im",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://unearth.im/favicon-32x32.png"
+      }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://josiest.com/#person",
+      "name": "Josie Jefferson",
+      "url": "https://josiest.com",
+      "jobTitle": "Digital Archaeologist",
+      "sameAs": ["https://twitter.com/josie", "https://linkedin.com/in/josie"], 
+      "affiliation": { "@id": "https://unearth.im/#organization" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://felixvelas.co/#person",
+      "name": "Felix Velasco",
+      "url": "https://felixvelas.co",
+      "jobTitle": "Trust Architect",
+      "affiliation": { "@id": "https://unearth.im/#organization" }
+    }
+  ]
+}
+</script>
+    
     <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -44,7 +132,42 @@
         <canvas id="artCanvas"></canvas>
     </main>
 
-    <!-- REMOVED: Instructions Overlay -->
+    <!-- NEW: Bottom-Left Artist Name -->
+    <div id="artist-name" class="fixed bottom-4 left-4 z-10 text-white text-xs hover:opacity-100 transition-opacity cursor-pointer font-sans">
+        apricity.im
+    </div>
+
+    <!-- NEW: Bottom-Right Brand Name -->
+    <div id="brand-name" class="fixed bottom-4 right-4 z-10 text-white text-xs hover:opacity-100 transition-opacity font-sans">
+        a digital monument by unearth.im
+    </div>
+
+    <!-- NEW: Artist Statement Modal -->
+    <div id="artist-modal" class="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-lg shadow-xl p-8 max-w-lg w-full relative font-sans">
+            <!-- Close Button -->
+            <button id="close-modal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-900 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            
+            <h2 class="text-2xl font-semibold text-gray-900 mb-4">Artist Statement</h2>
+            <div class="space-y-4 text-gray-700">
+                <p>
+                    <strong>Apricity</strong> (n.) — the warmth of the sun in winter.
+                </p>
+                <p>
+                    This piece is a quiet meditation on that feeling. It's a generative digital monument to the subtle, restorative power of light in the coldest time. 
+                </p>
+                <p>
+                    The world is cold and still, but not lifeless. As the sun makes its low arc, it brings a fleeting, mossy warmth back to the trees. Life is not gone, just dormant, waiting for that gentle reminder.
+                </p>
+                <p>
+                    The birds you startle are a reminder of the unseen life hidden in the landscape, and a reminder of your own presence within it.
+                </p>
+            </div>
+        </div>
+    </div>
+
 
     <script type="module">
         // --- Canvas and Context Setup ---
@@ -127,6 +250,7 @@
                 
                 this.currentWarmth = 0; // 0 (cold) to 1 (warm)
                 this.warmthRadius = 250; // How close the sun needs to be to warm it
+                this.generativeFlockSpawned = false; // NEW: Tracks if generative birds have flown
 
                 // NEW: Pre-calculate all random values so the tree shape is static
                 this.randomValues = [];
@@ -192,6 +316,18 @@
 
                 // Smoothly ease the current warmth towards the target warmth
                 this.currentWarmth += (targetWarmth - this.currentWarmth) * 0.02;
+
+                // --- NEW: Generative Bird Spawning ---
+                // If the tree is warm and hasn't spawned its flock yet
+                if (this.currentWarmth > 0.5 && !this.generativeFlockSpawned) {
+                    this.spawnBirds(); // Spawn the automatic flock
+                    this.generativeFlockSpawned = true; // Set the flag
+                } 
+                // If the tree has cooled down, reset the flag
+                else if (this.currentWarmth < 0.1 && this.generativeFlockSpawned) {
+                    this.generativeFlockSpawned = false; // Ready for the next cycle
+                }
+                // --- End of New Logic ---
             }
 
             /**
@@ -379,6 +515,16 @@
             const elapsed = (now - startTime) % DAY_DURATION;
             const dayProgress = elapsed / DAY_DURATION; // 0.0 to 1.0
 
+            // NEW: Calculate sun visibility (0 -> 1 -> 0) and fade text
+            const sunVisibility = Math.sin(dayProgress * Math.PI);
+            const baseOpacity = 0.5; // The max opacity (50%)
+            const newOpacity = sunVisibility * baseOpacity;
+            
+            // Apply the fade to the text elements
+            artistName.style.opacity = newOpacity;
+            brandName.style.opacity = newOpacity;
+
+
             // Sun X: Moves from left to right
             sun.x = dayProgress * (width + 200) - 100; // -100 to width+100
             
@@ -440,6 +586,32 @@
         // --- Initialization ---
         window.addEventListener('resize', resize);
         window.addEventListener('click', handleClick); // NEW: Add click listener
+        
+        // --- NEW: Modal Interactivity ---
+        const artistName = document.getElementById('artist-name');
+        const brandName = document.getElementById('brand-name'); // NEW: Added this reference
+        const artistModal = document.getElementById('artist-modal');
+        const closeModal = document.getElementById('close-modal');
+
+        // Show modal
+        artistName.addEventListener('click', () => {
+            artistModal.classList.remove('hidden');
+        });
+
+        // Hide modal with button
+        closeModal.addEventListener('click', () => {
+            artistModal.classList.add('hidden');
+        });
+
+        // Hide modal by clicking background
+        artistModal.addEventListener('click', (e) => {
+            // Check if the click is on the modal background itself
+            if (e.target === artistModal) {
+                artistModal.classList.add('hidden');
+            }
+        });
+
+        // --- Initialization ---
         resize(); // Initial setup
         startTime = Date.now(); // Reset start time
         // animate(0); // OLD CALL
