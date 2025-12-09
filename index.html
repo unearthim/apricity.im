@@ -132,13 +132,16 @@
     </main>
 
     <!-- NEW: Bottom-Left Artist Name -->
-    <div id="artist-name" class="fixed bottom-4 left-4 z-10 text-white text-xs hover:opacity-100 transition-opacity cursor-pointer font-sans">
+    <div id="artist-name" class="fixed bottom-4 left-4 z-10 text-gray-500 hover:text-gray-800 text-xs transition-colors cursor-pointer font-sans">
         apricity.im
     </div>
 
     <!-- NEW: Bottom-Right Brand Name -->
-    <div id="brand-name" class="fixed bottom-4 right-4 z-10 text-white text-xs hover:opacity-100 transition-opacity font-sans">
-        a digital monument by unearth.im
+    <div id="brand-name" class="fixed bottom-4 right-4 z-10 text-gray-500 hover:text-gray-800 text-xs transition-colors font-sans">
+        <small>
+            a <b><a href="https://sentientification.com" target="_blank" rel="noopener noreferrer" class="underline hover:text-gray-800">liminal mind meld</a></b> collaboration:<br>
+            digital monument by <b><a href="https://unearth.im" target="_blank" rel="noopener noreferrer" class="underline hover:text-gray-800">unearth.im</a></b> | <b><a href="https://archaeobytology.org" target="_blank" rel="noopener noreferrer" class="underline hover:text-gray-800">archive & anvil</a></b>
+        </small>
     </div>
 
     <!-- NEW: Artist Statement Modal -->
@@ -513,16 +516,6 @@
             
             const elapsed = (now - startTime) % DAY_DURATION;
             const dayProgress = elapsed / DAY_DURATION; // 0.0 to 1.0
-
-            // NEW: Calculate sun visibility (0 -> 1 -> 0) and fade text
-            const sunVisibility = Math.sin(dayProgress * Math.PI);
-            const baseOpacity = 0.5; // The max opacity (50%)
-            const newOpacity = sunVisibility * baseOpacity;
-            
-            // Apply the fade to the text elements
-            artistName.style.opacity = newOpacity;
-            brandName.style.opacity = newOpacity;
-
 
             // Sun X: Moves from left to right
             sun.x = dayProgress * (width + 200) - 100; // -100 to width+100
