@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apricity - A Digital Monument</title>
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="An interactive, generative artwork by unearth heritage foundry | archive & anvil celebrating 'Apricity' - the warmth of the winter sun.">
+    <meta name="keywords" content="apricity, generative art, interactive art, unearth.im, digital monument, html canvas, javascript art">
+    <meta name="author" content="unearth.im">
+    <!-- Open Graph Tags (for social sharing) -->
+    <meta property="og:title" content="Apricity - A Digital Monument">
+    <meta property="og:description" content="An interactive, generative artwork celebrating the warmth of the winter sun.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://placehold.co/1200x630/0f172a/94a3b8?text=Apricity">
+    <meta property="og:url" content="https://apricity.im"> <!-- Assuming this is the final URL -->
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #0f172a; /* Dark blue-gray fallback */
+            font-family: 'Inter', sans-serif;
+        }
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, #0f172a 60%, #e0e7ff); /* Sky to Snow */
+        }
+        /* Style for the fixed text overlays */
+        .brand-text {
+            position: fixed;
+            bottom: 1.5rem;
+            font-size: 0.875rem;
+            color: white;
+            transition: opacity 0.5s ease-in-out;
+            cursor: pointer;
+            user-select: none;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+        }
+        .brand-text:hover {
+            opacity: 1 !important; /* Full opacity on hover */
+        }
+        
+        /* Modal Styles */
+        #modal-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 40;
+        }
+        #modal-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        #modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+         #modal-overlay.visible #modal-content {
+            transform: scale(1);
+         }
+        
+        #modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            color: #6b7280;
+            cursor: pointer;
+            line-height: 1;
+        }
+        #modal-close:hover {
+            color: #111827;
+        }
+
+    </style>
+    <!-- Using Google Fonts for 'Inter' -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap" rel="stylesheet">
+</head>
+<body class="antialiased">
+
+    <!-- The main canvas for the artwork -->
+    <canvas id="artCanvas"></canvas>
+    
+    <!-- Text Overlays -->
+    <div id="apricity-link" class="brand-text left-6" style="opacity: 0.2;">
+        apricity.im
+    </div>
+    <div id="unearth-link" class="brand-text right-6" style="opacity: 0.2;">
+        a digital monument by unearth heritage foundry | archive & anvil
+    </div>
+    
+    <!-- Modal for Artist Statement -->
+    <div id="modal-overlay">
+        <div id="modal-content">
+            <div id="modal-close">&times;</div>
+            <h2 class="text-2xl font-semibold text-gray-900 mb-4">Artist Statement</h2>
+            <div class="space-y-4 text-gray-700">
+                <p>
+                    <strong>Apricity</strong> (n.) - the warmth of the sun in winter.
+                </p>
+                <p>
+                    This generative artwork is a meditation on a quiet, powerful feeling. In a cold, still landscape, the sun brings a slow, restorative warmth—waking the trees and reminding us of life.
+                </p>
+                <p>
+                    It is a digital monument to a small moment of comfort, dedicated to finding warmth on the coldest days.
+                </p>
+                <p class="mt-6 text-sm text-gray-500">
+                    &mdash; unearth.im
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="module">
+        const canvas = document.getElementById('artCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // --- Global Settings ---
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+        let trees = [];
+        let birds = [];
+        const DAY_DURATION = 60000; // 60 seconds for testing
+        
+        // References to UI elements
+        const apricityLink = document.getElementById('apricity-link');
+        const unearthLink = document.getElementById('unearth-link');
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalClose = document.getElementById('modal-close');
+
+        // --- Sun Class ---
+        class Sun {
+            constructor() {
+                this.x = 0;
+                this.y = 0;
+                this.radius = 50;
+                this.color = 'rgba(255, 220, 150, 0.8)'; // Warm sun color
+                this.glow = 'rgba(255, 220, 150, 0.1)';
+            }
+            
+            update(time) {
+                // Calculate the sun's position based on the time of day
+                const cycle = (time % DAY_DURATION) / DAY_DURATION; // 0 to 1
+                
+                // 1. Horizontal movement (left to right)
+                // We give it a little extra room (-0.1 to 1.1) so it starts/ends off-screen
+                this.x = (cycle * 1.2) * width - (width * 0.1);
+
+                // 2. Vertical movement (low winter arc)
+                const horizonY = height * 0.7; // Lower on the screen
+                const arcHeight = height * 0.3; // A shallow arc
+                
+                // A sine wave from 0 (sunrise) -> 1 (midday) -> 0 (sunset)
+                const arc = Math.sin(cycle * Math.PI); 
+                
+                this.y = horizonY - (arc * arcHeight);
+            }
+            
+            draw() {
+                // Draw the glow
+                ctx.beginPath();
+                const glowRadius = this.radius * 3;
+                const gradient = ctx.createRadialGradient(this.x, this.y, this.radius * 0.5, this.x, this.y, glowRadius);
+                gradient.addColorStop(0, this.color);
+                gradient.addColorStop(1, 'rgba(255, 220, 150, 0)');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(this.x - glowRadius, this.y - glowRadius, glowRadius * 2, glowRadius * 2);
+                
+                // Draw the core sun
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+        }
+
+        // --- Tree Class ---
+        class Tree {
+            constructor(x, y, size) {
+                this.x = x;
+                this.y = y;
+                this.size = size; // Base trunk length
+                this.coldColor = `rgba(100, 116, 139, 0.7)`; // Drab gray-blue
+                this.warmColor = `rgba(110, 120, 90, 0.8)`;  // Mossy green-brown
+                this.currentWarmth = 0; // 0 (cold) to 1 (warm)
+                this.warmthRadius = 400; // **FIXED**: How close the sun needs to be
+                this.generativeFlockSpawned = false; // Tracks if generative birds have flown
+
+                // Pre-calculate all random values so the tree shape is static
+                this.randomValues = [];
+                for (let i = 0; i < 50; i++) { // Generate enough random numbers for branches
+                    this.randomValues.push(Math.random());
+                }
+                this.branchData = this.buildBranches(this.size, 0); // Build the static branch data
+            }
+
+            // A recursive function to pre-calculate branch data
+            buildBranches(len, randIndex) {
+                let branches = [];
+                if (len < 8) return branches;
+
+                // Use pre-calculated random values
+                const r1 = this.randomValues[randIndex % this.randomValues.length];
+                const r2 = this.randomValues[(randIndex + 1) % this.randomValues.length];
+                const r3 = this.randomValues[(randIndex + 2) % this.randomValues.length];
+
+                // Right branch
+                branches.push({ 
+                    len: len * 0.7, 
+                    angle: (r1 * 0.5) + 0.3, // 0.3 to 0.8 rad
+                    children: this.buildBranches(len * 0.7, randIndex + 3)
+                });
+                // Left branch
+                branches.push({ 
+                    len: len * 0.7, 
+                    angle: -(r2 * 0.5) - 0.3, // -0.3 to -0.8 rad
+                    children: this.buildBranches(len * 0.7, randIndex + 6)
+                });
+                
+                // Sometimes a middle branch
+                if (r3 > 0.5) {
+                    branches.push({
+                        len: len * 0.6,
+                        angle: (r3 * 0.2) - 0.1, // -0.1 to 0.1 rad
+                        children: this.buildBranches(len * 0.6, randIndex + 9)
+                    });
+                }
+                return branches;
+            }
+
+            // Recursive drawing function that USES the pre-calculated data
+            drawTree(len, branchData, color) {
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.lineTo(0, -len);
+                ctx.strokeStyle = color;
+                ctx.lineWidth = Math.max(1, len / 10);
+                ctx.stroke();
+
+                ctx.translate(0, -len);
+
+                for (const branch of branchData) {
+                    ctx.save();
+                    ctx.rotate(branch.angle);
+                    this.drawTree(branch.len, branch.children, color);
+                    ctx.restore();
+                }
+            }
+            
+            // Interpolate color based on warmth
+            getColor() {
+                const r = Math.floor(100 + (110 - 100) * this.currentWarmth);
+                const g = Math.floor(116 + (120 - 116) * this.currentWarmth);
+                const b = Math.floor(139 + (90 - 139) * this.currentWarmth);
+                const a = 0.7 + (0.8 - 0.7) * this.currentWarmth;
+                return `rgba(${r}, ${g}, ${b}, ${a})`;
+            }
+
+            update(sun) {
+                const dx = sun.x - this.x;
+                const dy = sun.y - (this.y - this.size * 0.5); // Check against the middle of the tree
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                let targetWarmth = 0;
+                if (dist < this.warmthRadius) {
+                    targetWarmth = 1 - (dist / this.warmthRadius);
+                }
+                
+                // Smoothly ease the current warmth towards the target warmth
+                this.currentWarmth += (targetWarmth - this.currentWarmth) * 0.02;
+
+                // --- Generative Bird Spawning ---
+                // If the tree is warm and hasn't spawned its flock yet
+                if (this.currentWarmth > 0.3 && !this.generativeFlockSpawned) { // **FIXED**: Lowered threshold
+                    this.spawnBirds(); // Spawn the automatic flock
+                    this.generativeFlockSpawned = true; // Set the flag
+                } 
+                // If the tree has cooled down, reset the flag
+                else if (this.currentWarmth < 0.1 && this.generativeFlockSpawned) {
+                    this.generativeFlockSpawned = false; // Ready for the next cycle
+                }
+            }
+
+            draw() {
+                const color = this.getColor();
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.lineCap = 'round';
+                // Use the pre-calculated branch data to draw
+                this.drawTree(this.size, this.branchData, color);
+                ctx.restore();
+            }
+            
+            spawnBirds(flockSize = 10) {
+                 for (let i = 0; i < flockSize; i++) {
+                    // Spawn birds from the upper branches
+                    const spawnX = this.x + (Math.random() - 0.5) * this.size * 0.5;
+                    const spawnY = this.y - this.size * 0.7 + (Math.random() - 0.5) * this.size * 0.3;
+                    birds.push(new Bird(spawnX, spawnY));
+                }
+            }
+
+            // Check if a click (mx, my) is on this tree
+            isClicked(mx, my) {
+                // Simple bounding box check
+                const treeTop = this.y - this.size;
+                const treeBottom = this.y;
+                const treeWidth = this.size; // Rough approximation
+                
+                return (mx > this.x - treeWidth / 2 &&
+                        mx < this.x + treeWidth / 2 &&
+                        my > treeTop &&
+                        my < treeBottom);
+            }
+        }
+        
+        // --- Bird Class ---
+        class Bird {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 5 + 5;
+                this.vx = (Math.random() - 0.5) * 4; // Horizontal velocity
+                this.vy = -Math.random() * 2 - 2;   // Upward velocity
+                this.wingAngle = 0;
+                this.life = 100 + Math.random() * 50; // Frames to live
+            }
+            
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.vy += 0.05; // Gravity
+                this.wingAngle += 0.3;
+                this.life--;
+            }
+            
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.vy * 0.1); // Angle bird slightly based on vertical speed
+                
+                const wing = Math.sin(this.wingAngle) * this.size * 0.5;
+                
+                ctx.beginPath();
+                ctx.moveTo(-this.size / 2, 0);
+                ctx.quadraticCurveTo(0, wing, this.size / 2, 0); // Top wing
+                ctx.quadraticCurveTo(0, wing * 0.7, -this.size / 2, 0); // Bottom
+                
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                ctx.fill();
+                
+                ctx.restore();
+            }
+            
+            isAlive() {
+                return this.life > 0 && this.y > -this.size && this.x > -this.size && this.x < width + this.size;
+            }
+        }
+
+        // --- Initialization ---
+        function init() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+
+            // Create the background gradient
+            const bgGradient = ctx.createLinearGradient(0, 0, 0, height);
+            bgGradient.addColorStop(0, '#0f172a'); // Night sky
+            bgGradient.addColorStop(0.6, '#3b82f6'); // Day sky
+            bgGradient.addColorStop(0.7, '#e0e7ff'); // Snow
+            ctx.fillStyle = bgGradient;
+            ctx.fillRect(0, 0, width, height);
+            
+            // Create trees
+            trees = [];
+            const treeCount = Math.floor(width / 150);
+            const groundY = height * 0.75;
+            for (let i = 0; i < treeCount; i++) {
+                const x = Math.random() * width;
+                const size = (Math.random() * 0.5 + 0.5) * (height * 0.15); // 50-100% of 15% of height
+                const y = groundY + Math.random() * 40; // Stagger them slightly
+                trees.push(new Tree(x, y, size));
+            }
+            // Sort trees by Y so they "overlap" correctly
+            trees.sort((a, b) => a.y - b.y);
+
+            // Create the sun
+            window.sun = new Sun(); // Make it global for easier access
+        }
+
+        // --- Animation Loop ---
+        function animate(time) {
+            // 1. Clear and draw background
+            const bgGradient = ctx.createLinearGradient(0, 0, 0, height);
+            bgGradient.addColorStop(0, '#0f172a'); // Night sky
+            bgGradient.addColorStop(0.6, '#3b82f6'); // Day sky
+            bgGradient.addColorStop(0.7, '#e0e7ff'); // Snow
+            ctx.fillStyle = bgGradient;
+            ctx.fillRect(0, 0, width, height);
+            
+            // 2. Update and draw Sun
+            sun.update(time);
+            sun.draw();
+            
+            // 3. Update and draw Trees
+            trees.forEach(tree => {
+                tree.update(sun);
+                tree.draw();
+            });
+            
+            // 4. Update and draw Birds
+            birds = birds.filter(bird => bird.isAlive());
+            birds.forEach(bird => {
+                bird.update();
+                bird.draw();
+            });
+            
+            // 5. Update UI Opacity based on Sun's cycle
+            const cycle = (time % DAY_DURATION) / DAY_DURATION; // 0 to 1
+            const sunBrightness = Math.sin(cycle * Math.PI); // 0 -> 1 -> 0
+            
+            // Base opacity 20%, max opacity 50%
+            const textOpacity = 0.2 + (sunBrightness * 0.3); // 0.2 to 0.5
+            
+            apricityLink.style.opacity = textOpacity;
+            unearthLink.style.opacity = textOpacity;
+
+            requestAnimationFrame(animate);
+        }
+
+        // --- Event Listeners ---
+        window.addEventListener('resize', init);
+        
+        canvas.addEventListener('click', (e) => {
+            let clickedTree = null;
+            
+            for (const tree of trees) {
+                if (tree.isClicked(e.clientX, e.clientY)) {
+                    clickedTree = tree;
+                    break;
+                }
+            }
+
+            if (clickedTree && clickedTree.currentWarmth > 0.3) {
+                // Clicked a warm tree, spawn a big flock
+                clickedTree.spawnBirds(15);
+            } else {
+                // Clicked anywhere else, spawn a small flock
+                for (let i = 0; i < 5; i++) {
+                    birds.push(new Bird(e.clientX, e.clientY));
+                }
+            }
+        });
+        
+        // Modal Listeners
+        function openModal() {
+            modalOverlay.classList.add('visible');
+        }
+        function closeModal() {
+            modalOverlay.classList.remove('visible');
+        }
+        
+        apricityLink.addEventListener('click', openModal);
+        modalClose.addEventListener('click', closeModal);
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                closeModal();
+            }
+        });
+
+
+        // --- Start ---
+        init();
+        animate(0);
+
+    </script>
+</body>
+</html>
