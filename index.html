@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- SEO Meta Tags -->
     <title>Apricity: An Interactive Artwork</title>
-    <meta name="description" content="A generative artwork exploring 'apricity' - the warmth of the winter sun. Watch as a low sun brings life to a cold landscape.">
-    
+    <meta name="description"
+        content="A generative artwork exploring 'apricity' - the warmth of the winter sun. Watch as a low sun brings life to a cold landscape.">
+
     <!-- Open Graph / Facebook -->
     <meta property="og:title" content="APRICITY.IM • The Warmth of the Winter Sun">
-    <meta property="og:description" content="A digital monument exploring apricity - the warmth of the winter sun. An interactive generative artwork where life awakens as the sun travels its low winter arc.">
+    <meta property="og:description"
+        content="A digital monument exploring apricity - the warmth of the winter sun. An interactive generative artwork where life awakens as the sun travels its low winter arc.">
     <meta property="og:image" content="https://apricity.im/og-image.png">
     <meta property="og:site_name" content="apricity.im">
     <meta property="og:url" content="https://apricity.im">
@@ -19,7 +22,8 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://apricity.im">
     <meta name="twitter:title" content="APRICITY.IM • The Warmth of the Winter Sun">
-    <meta name="twitter:description" content="A digital monument exploring apricity - the warmth of the winter sun. An interactive generative artwork where life awakens as the sun travels its low winter arc.">
+    <meta name="twitter:description"
+        content="A digital monument exploring apricity - the warmth of the winter sun. An interactive generative artwork where life awakens as the sun travels its low winter arc.">
     <meta name="twitter:image" content="https://apricity.im/og-image.png">
 
     <!-- Canonical Link -->
@@ -28,7 +32,7 @@
     <!-- Webmention Endpoint -->
     <link rel="webmention" href="https://webmention.io/unearth.im/webmention" />
 
-<script type="application/ld+json">
+    <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
@@ -68,7 +72,7 @@
       "@type": "Organization",
       "@id": "https://unearth.im/#organization",
       "name": "Unearth Heritage Foundry",
-"alternateName": ["Unearth Foundry", "Archive & Anvil"],
+"alternateName": ["Unearth Foundry","Archive & Anvil","Unearth Anvil","Unearth Works","Cultural Infrastructure Foundry"],
       "url": "https://unearth.im",
       "logo": {
         "@type": "ImageObject",
@@ -94,36 +98,42 @@
   ]
 }
 </script>
-    
+
     <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <style>
         /* Use Inter font */
         body {
             font-family: 'Inter', sans-serif;
         }
-        
+
         /* Make html and body take full screen, remove margin/padding */
-        html, body {
+        html,
+        body {
             width: 100vw;
             height: 100vh;
             margin: 0;
             padding: 0;
-            overflow: hidden; /* Prevent scrollbars */
+            overflow: hidden;
+            /* Prevent scrollbars */
         }
 
         /* Canvas should be a block element */
         #artCanvas {
-            touch-action: none; /* Disable panning/zooming on touch */
-            display: block; /* Remove any default spacing */
+            touch-action: none;
+            /* Disable panning/zooming on touch */
+            display: block;
+            /* Remove any default spacing */
         }
+
         /* Fallback font for Tailwind */
         .font-sans {
             font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
         }
     </style>
 </head>
+
 <body class="bg-gray-900">
 
     <!-- The Interactive Artwork -->
@@ -133,15 +143,21 @@
     </main>
 
     <!-- NEW: Bottom-Left Artist Name -->
-    <div id="artist-name" class="fixed bottom-4 left-4 z-10 text-gray-500 hover:text-gray-800 text-xs transition-colors cursor-pointer font-sans">
+    <div id="artist-name"
+        class="fixed bottom-4 left-4 z-10 text-gray-500 hover:text-gray-800 text-xs transition-colors cursor-pointer font-sans">
         apricity.im
     </div>
 
     <!-- NEW: Bottom-Right Brand Name -->
-    <div id="brand-name" class="fixed bottom-4 right-4 z-10 text-gray-500 hover:text-gray-800 text-xs transition-colors font-sans">
+    <div id="brand-name"
+        class="fixed bottom-4 right-4 z-10 text-gray-500 hover:text-gray-800 text-xs transition-colors font-sans">
         <small>
-            a <b><a href="https://sentientification.com" target="_blank" rel="noopener noreferrer" class="underline hover:text-gray-800">liminal mind meld</a></b> collaboration:<br>
-            digital monument by <b><a href="https://unearth.im" target="_blank" rel="noopener noreferrer" class="underline hover:text-gray-800">unearth.im</a></b> | <b><a href="https://archaeobytology.org" target="_blank" rel="noopener noreferrer" class="underline hover:text-gray-800">archive & anvil</a></b>
+            a <b><a href="https://sentientification.com" target="_blank" rel="noopener noreferrer"
+                    class="underline hover:text-gray-800">liminal mind meld</a></b> collaboration:<br>
+            digital monument by <b><a href="https://unearth.im" target="_blank" rel="noopener noreferrer"
+                    class="underline hover:text-gray-800">unearth.im</a></b> | <b><a href="https://archaeobytology.org"
+                    target="_blank" rel="noopener noreferrer" class="underline hover:text-gray-800">archive &
+                    anvil</a></b>
         </small>
     </div>
 
@@ -150,22 +166,29 @@
         <div class="bg-white rounded-lg shadow-xl p-8 max-w-lg w-full relative font-sans">
             <!-- Close Button -->
             <button id="close-modal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-900 transition-colors">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
             </button>
-            
+
             <h2 class="text-2xl font-semibold text-gray-900 mb-4">Artist Statement</h2>
             <div class="space-y-4 text-gray-700">
                 <p>
                     <strong>Apricity</strong> (n.) — the warmth of the sun in winter.
                 </p>
                 <p>
-                    This piece is a quiet meditation on that feeling. It's a generative digital monument to the subtle, restorative power of light in the coldest time. 
+                    This piece is a quiet meditation on that feeling. It's a generative digital monument to the subtle,
+                    restorative power of light in the coldest time.
                 </p>
                 <p>
-                    The world is cold and still, but not lifeless. As the sun makes its low arc, it brings a fleeting, mossy warmth back to the trees. Life is not gone, just dormant, waiting for that gentle reminder.
+                    The world is cold and still, but not lifeless. As the sun makes its low arc, it brings a fleeting,
+                    mossy warmth back to the trees. Life is not gone, just dormant, waiting for that gentle reminder.
                 </p>
                 <p>
-                    The birds you startle are a reminder of the unseen life hidden in the landscape, and a reminder of your own presence within it.
+                    The birds you startle are a reminder of the unseen life hidden in the landscape, and a reminder of
+                    your own presence within it.
                 </p>
             </div>
         </div>
@@ -183,7 +206,7 @@
 
         // --- State ---
         let width, height;
-        
+
         // --- Generative State ---
         let sun = { x: 0, y: 0, radius: 50 };
         let trees = [];
@@ -191,7 +214,7 @@
         let startTime = Date.now();
         const DAY_DURATION = 600000; // 10 minutes (10 * 60 * 1000 ms)
         const snowLevel = 0.8; // 80% down the screen
-        
+
         // --- Helper Function ---
         /**
          * Linearly interpolates between two values
@@ -247,10 +270,10 @@
                 this.len = len;
                 this.angle = angle;
                 this.branchWidth = branchWidth;
-                
+
                 this.coldHSL = coldHSL; // { h, s, l }
                 this.warmHSL = warmHSL; // { h, s, l }
-                
+
                 this.currentWarmth = 0; // 0 (cold) to 1 (warm)
                 this.warmthRadius = 250; // How close the sun needs to be to warm it
                 this.generativeFlockSpawned = false; // NEW: Tracks if generative birds have flown
@@ -282,7 +305,7 @@
             getBoundingBox() {
                 // A simplified box around the main trunk and lower branches
                 const boxHeight = this.len * 1.2;
-                const boxWidth = this.len; 
+                const boxWidth = this.len;
                 return {
                     x: this.x - boxWidth / 2,
                     y: this.y - boxHeight, // y is at the base, so go up
@@ -310,7 +333,7 @@
             update(sunX, sunY) {
                 // Calculate distance from the base of the tree to the sun
                 const dist = Math.hypot(this.x - sunX, (this.y - this.len * 0.5) - sunY);
-                
+
                 let targetWarmth = 0;
                 if (dist < this.warmthRadius) {
                     // The closer the sun, the warmer it gets (1.0 at 0 distance, 0.0 at max distance)
@@ -325,7 +348,7 @@
                 if (this.currentWarmth > 0.5 && !this.generativeFlockSpawned) {
                     this.spawnBirds(); // Spawn the automatic flock
                     this.generativeFlockSpawned = true; // Set the flag
-                } 
+                }
                 // If the tree has cooled down, reset the flag
                 else if (this.currentWarmth < 0.1 && this.generativeFlockSpawned) {
                     this.generativeFlockSpawned = false; // Ready for the next cycle
@@ -341,9 +364,9 @@
                 const h = lerp(this.coldHSL.h, this.warmHSL.h, this.currentWarmth);
                 const s = lerp(this.coldHSL.s, this.warmHSL.s, this.currentWarmth);
                 const l = lerp(this.coldHSL.l, this.warmHSL.l, this.currentWarmth);
-                
+
                 const color = `hsl(${h}, ${s}%, ${l}%)`;
-                
+
                 // Start the recursive drawing process
                 this.drawBranch(ctx, this.x, this.y, this.len, this.angle, this.branchWidth, color, 0);
             }
@@ -366,9 +389,9 @@
                     c.restore();
                     return;
                 }
-                
+
                 // Get PRE-CALCULATED random values for this depth
-                const rand = this.randomValues[depth]; 
+                const rand = this.randomValues[depth];
                 if (!rand) { // Safety check
                     c.restore();
                     return;
@@ -383,8 +406,8 @@
                 c.beginPath();
                 this.drawBranch(c, 0, -len, newLen, rand.angle2, newWidth, color, depth + 1);
                 if (rand.hasThirdBranch) {
-                     c.beginPath();
-                     this.drawBranch(c, 0, -len * rand.thirdBranchLenMult , len * 0.5, rand.thirdBranchAngle, newWidth * 0.9, color, depth + 1);
+                    c.beginPath();
+                    this.drawBranch(c, 0, -len * rand.thirdBranchLenMult, len * 0.5, rand.thirdBranchAngle, newWidth * 0.9, color, depth + 1);
                 }
 
                 c.restore();
@@ -441,7 +464,7 @@
             bgCtx.lineTo(0, height);
             bgCtx.closePath();
             bgCtx.fill();
-            
+
             // NOTE: Trees are no longer drawn here.
         }
 
@@ -465,7 +488,7 @@
         }
 
         // --- Event Handlers ---
-        
+
         /**
          * NEW: Handle clicks on the canvas
          */
@@ -477,11 +500,11 @@
             // Check if the click hit a warm tree
             for (const tree of trees) {
                 const box = tree.getBoundingBox();
-                
+
                 // 1. Check if click is inside the tree's box
                 if (clickX > box.x && clickX < box.x + box.width &&
                     clickY > box.y && clickY < box.y + box.height) {
-                    
+
                     // 2. Check if the tree is "warm"
                     if (tree.currentWarmth > 0.4) {
                         tree.spawnBirds();
@@ -504,7 +527,7 @@
             const rect = container.getBoundingClientRect();
             width = canvas.width = rect.width;
             height = canvas.height = rect.height;
-            
+
             drawBackground(); // Re-draw the static background
             createTrees(); // Re-create the dynamic trees
         }
@@ -514,16 +537,16 @@
             // 1. Calculate Sun Position
             // const now = timestamp || Date.now(); // OLD BUGGY LINE
             const now = Date.now(); // NEW: Always use wall clock time, ignore timestamp
-            
+
             const elapsed = (now - startTime) % DAY_DURATION;
             const dayProgress = elapsed / DAY_DURATION; // 0.0 to 1.0
 
             // Sun X: Moves from left to right
             sun.x = dayProgress * (width + 200) - 100; // -100 to width+100
-            
+
             // Sun Y: Moves in a low arc
             // Math.sin(dayProgress * Math.PI) goes from 0 -> 1 -> 0
-            
+
             // OLD BUGGY LINE:
             // This makes it start high, go low (max height at 0.5), and return high
             // sun.y = (height * 0.2) + Math.sin(dayProgress * Math.PI) * (height * 0.7);
@@ -548,7 +571,7 @@
             sunGradient.addColorStop(0, 'rgba(255, 255, 220, 1)');
             sunGradient.addColorStop(0.5, 'rgba(255, 204, 100, 0.8)');
             sunGradient.addColorStop(1, 'rgba(255, 180, 70, 0)');
-            
+
             ctx.fillStyle = sunGradient;
             ctx.beginPath();
             ctx.arc(sun.x, sun.y, sun.radius, 0, Math.PI * 2);
@@ -579,7 +602,7 @@
         // --- Initialization ---
         window.addEventListener('resize', resize);
         window.addEventListener('click', handleClick); // NEW: Add click listener
-        
+
         // --- NEW: Modal Interactivity ---
         const artistName = document.getElementById('artist-name');
         const brandName = document.getElementById('brand-name'); // NEW: Added this reference
@@ -612,4 +635,5 @@
     </script>
 
 </body>
+
 </html>
